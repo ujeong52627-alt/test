@@ -54,8 +54,22 @@
         .left-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-content: start; }
         .menu-btn { background: #ffe0b2; border: 1px solid #ffcc80; border-radius: 8px; height: 80px; display: flex; justify-content: center; align-items: center; text-align: center; font-size: 13px; font-weight: 700; color: #5d4037; cursor: pointer; transition: 0.2s; }
         .menu-btn:hover { transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .menu-btn.diagnostic { grid-column: span 2; background: #fff3e0; border: 2px dashed #ff9800; font-size: 15px; color: #e65100; display: flex; gap: 10px; }
-        .icon-check { font-size: 20px; }
+      /* [수정됨] 진단검사 버튼 애니메이션 추가 */
+    .menu-btn.diagnostic { 
+        grid-column: span 2; 
+        background: #fff3e0; 
+        border: 2px dashed #ff9800; 
+        font-size: 15px; 
+        color: #e65100; 
+        gap: 10px; 
+        animation: pulse 1.5s infinite ease-in-out; /* 1.5초 간격으로 무한 반복 */
+    }
+    /* [추가] 두근두근 애니메이션 키프레임 */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.03); box-shadow: 0 0 15px rgba(255, 152, 0, 0.4); }
+        100% { transform: scale(1); }
+    }
 
         .center-panel { display: flex; flex-direction: column; gap: 15px; }
         .hero-card { background: #e1bee7; border-radius: 15px; padding: 30px; text-align: center; height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
@@ -284,10 +298,25 @@
         </div>
         <div class="question-step" id="q2">
             <div class="split-layout">
-                <div class="passage-area"><strong>&lt;토끼와 거북이&gt;</strong><br><br>옛날에 토끼와 거북이가 경주를 했어요. 토끼는 자신이 빨라서 거북이를 이길 거라 생각하고 중간에 낮잠을 잤지요. 하지만 거북이는 쉬지 않고 엉금엉금 기어서 결국 먼저 결승점에 도착했답니다.</div>
-                <div class="question-area">
-                    <div class="question-title" style="font-size: 16px;"><span class="q-number-badge">2</span>거북이가 경주에서 이긴 이유는?</div>
-                    <div class="choice-list"><button class="choice-btn" onclick="selectAnswer(this, 2)">토끼보다 더 빨라서</button><button class="choice-btn" onclick="selectAnswer(this, 2)">포기하지 않고 꾸준히 가서</button></div>
+               <div class="passage-area">
+            <div class="passage-content" style="line-height: 1.8; font-size: 16px; word-break: keep-all; text-align: justify; color: #333;">
+                <strong style="display:block; font-size: 18px; margin-bottom: 20px; color: #000;">
+                    제목: 자연의 청소부, 파리의 한살이
+                </strong>
+                <p style="margin-bottom: 15px;">
+                    파리는 왜 음식물이나 쓰레기통 근처에 자주 모일까요? 이것은 파리의 한살이 과정과 관련이 있습니다. 파리는 나비나 벌처럼 곤충에 속하는 작은 동물입니다. 파리는 <strong>알 &rarr; 애벌레 &rarr; 번데기 &rarr; 어른벌레</strong>의 네 단계를 거치는 한살이 과정을 겪는데, 이 과정을 ‘완전 탈바꿈’이라고 합니다.
+                </p>
+                <p style="margin-bottom: 15px;">
+                    파리의 한살이는 썩은 음식물이나 동물의 배설물에 알을 낳으며 시작됩니다. 이것이 바로 파리가 음식물이나 쓰레기통 근처에서 자주 보이는 이유입니다. 알이 부화하면 ‘구더기’라고 불리는 애벌레가 되는데, 구더기는 자신이 태어난 곳 주변의 썩은 물질을 먹으며 자랍니다. 이 과정은 주변의 더러운 찌꺼기를 줄이는 데 도움이 됩니다. 구더기는 허물을 벗으며 몸집이 커지고, 몸집이 충분히 커지면 움직임을 멈추고 번데기가 됩니다. 번데기 속에서 애벌레의 몸이 어른벌레의 모습으로 바뀌며, 성장이 끝나면 우리가 아는 파리의 모습이 됩니다.
+                </p>
+                <p>
+                    많은 사람들이 파리를 귀찮거나 더러운 해충이라고 생각하지만, 사실 파리는 자라는 동안 썩은 것을 먹어 없애기 때문에 자연을 깨끗하게 만드는 데 도움을 주는 특별한 역할을 합니다. 그래서 과학자들은 파리를 <strong>‘자연의 청소부’</strong>라고 부르며, 최근에는 구더기를 이용해 음식물 쓰레기를 처리하는 연구도 이루어지고 있습니다.
+                </p>
+            </div>
+        </div>
+                      <div class="question-area">
+                    <div class="question-title" style="font-size: 16px;"><span class="q-number-badge">2</span>이 글에서 가장 중심이 되는 말은 무엇인가요?</div>
+                    <div class="choice-list"><button class="choice-btn" onclick="selectAnswer(this, 2)">파리의 한살이</button><button class="choice-btn" onclick="selectAnswer(this, 2)">애벌레</button><button class="choice-btn" onclick="selectAnswer(this, 2)">작은 동물</button><button class="choice-btn" onclick="selectAnswer(this, 2)">청소부</button></div>
                 </div>
             </div>
         </div>
