@@ -13,7 +13,9 @@
             margin: 0; padding: 0; 
             font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; 
             background-color: white; 
+            /* [수정] 모바일 브라우저 주소창 대응을 위해 dvh 단위 사용 (지원 안하는 브라우저를 위해 vh 병기) */
             height: 100vh; 
+            height: 100dvh; 
             overflow: hidden; 
         }
         
@@ -75,18 +77,21 @@
         .content-area {
             flex-grow: 1;
             position: relative;
-            overflow: hidden;
+            /* [수정] 내용이 넘치면 스크롤이 생기도록 변경 (잘림 방지) */
+            overflow-y: auto; 
+            overflow-x: hidden;
             background-color: #fff;
             display: flex;
             flex-direction: column;
+            /* [수정] 하단 내비게이션 버튼에 가려지지 않도록 여백 추가 */
+            padding-bottom: 100px; 
         }
         .screen {
             display: none; 
             width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
+            /* height: 100%; [삭제] 스크롤을 위해 높이 강제 제거 */
+            min-height: 100%; /* 최소 높이만 100%로 설정 */
+            position: relative; /* absolute에서 relative로 변경하여 스크롤 흐름에 따름 */
             animation: fadeIn 0.3s ease-out;
             flex-direction: column; 
         }
@@ -105,7 +110,8 @@
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            height: 100%;
+            /* height: 100%; [삭제] 높이 유동적으로 변경 */
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -209,6 +215,9 @@
             background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); 
             justify-content: center; 
             align-items: center; 
+            /* 인트로 화면은 꽉 차게 */
+            position: absolute; 
+            top: 0; left: 0; height: 100%;
         }
         .book-cover { width: 600px; height: 420px; background-color: #1e293b; border-radius: 15px; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.3); margin: 50px 0; overflow: hidden; border: 10px solid #475569; }
         .book-title { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 48px; font-weight: bold; text-align: center; text-shadow: 0 4px 8px rgba(0,0,0,0.5); width: 100%; line-height: 1.3; }
@@ -221,6 +230,9 @@
             justify-content: center; 
             align-items: center;
             text-align: center;
+            /* 아웃트로 화면도 꽉 차게 */
+            position: absolute; 
+            top: 0; left: 0; height: 100%;
         }
         .outro-icon { font-size: 100px; margin-bottom: 20px; animation: bounce 2s infinite; }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-30px);} 60% {transform: translateY(-15px);} }
@@ -266,29 +278,24 @@
             flex-direction: column; 
             position: relative;
             min-height: 550px; 
+            margin-bottom: 30px; /* 카드 아래 여백 추가 */
         }
         
-        /* 다음 단어 화살표 (카드 내부 오른쪽) */
-        .vocab-next-arrow {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #3b82f6;
+        .vocab-arrow-btn {
+            background: #3b82f6; border: none; cursor: pointer; color: white;
             transition: transform 0.2s;
-            z-index: 10;
+            padding: 15px; border-radius: 50%; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; 
         }
-        .vocab-next-arrow:hover { transform: translateY(-50%) scale(1.2); }
+        .vocab-arrow-btn:hover { transform: scale(1.1); }
+        .vocab-arrow-btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* 단어 제목 */
         .vocab-main-title {
             text-align: center; font-size: 80px; font-weight: 900; color: #1f2937; margin-bottom: 10px;
         }
 
-        /* 한자 영역 */
         .hanja-box { 
             background: transparent; padding: 10px; 
             display: flex; justify-content: center; align-items: center; 
@@ -302,7 +309,6 @@
         }
         .hanja-reveal.revealed { background-color: #dbeafe; color: #1e40af; font-weight: bold; }
 
-        /* 하단 레이아웃 (이미지 + 텍스트) - 점선 테두리 */
         .vocab-bottom-layout {
             display: flex; gap: 40px; 
             border: 3px dashed #fdba74; 
@@ -354,6 +360,21 @@
         .highlight-yellow { background-color: #fef08a; padding: 0 5px; border-radius: 4px; }
         .speaker-icon { cursor: pointer; color: #ea580c; transition: color 0.2s; } /* 주황색 스피커 */
         .speaker-icon:hover { color: #c2410c; }
+
+        /* 다음 단어 화살표 (카드 내부 오른쪽) */
+        .vocab-next-arrow {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #3b82f6;
+            transition: transform 0.2s;
+            z-index: 10;
+        }
+        .vocab-next-arrow:hover { transform: translateY(-50%) scale(1.2); }
 
 
         /* 게임 */
@@ -579,7 +600,7 @@
                         <span>빈칸을 눌러 이번 시간 어휘를 알아봅시다.</span>
                     </div>
                     
-                    <!-- 별점 영역 -->
+                    <!-- 별점 영역 (대지시문과 카드 사이) -->
                     <div class="star-rating-area" id="vocab-star-rating">
                         <i data-lucide="star" class="star-icon" size="28"></i> 
                         <i data-lucide="star" class="star-icon" size="28"></i> 
@@ -587,6 +608,11 @@
 
                     <div class="vocab-container" id="vocab-cards-container">
                         
+                        <!-- 이전 버튼 (첫 번째 카드에서는 숨김) -->
+                        <button class="vocab-arrow-btn" id="prev-word-btn" onclick="prevVocabCard()" style="display: none; margin-right: -30px; z-index: 1;">
+                            <i data-lucide="chevron-left" size="40"></i>
+                        </button>
+
                         <!-- 첫 번째 단어 카드 (가치) -->
                         <div class="vocab-card" id="vocab-card-1">
                             <button class="vocab-next-arrow" onclick="nextVocabCard()">
@@ -601,10 +627,12 @@
                                 <div class="hanja-item"><span>値</span><div class="hanja-reveal" onclick="reveal(this, '값 치', 1)">?</div></div>
                             </div>
                             
+                            <!-- 하단 레이아웃: 이미지 + 텍스트 -->
                             <div class="vocab-bottom-layout">
-                                <!-- 이미지 (사용자 교체용) -->
+                                <!-- 이미지 플레이스홀더 (Wrapper) -->
                                 <div class="vocab-img-placeholder">
-                                    <img src="https://placehold.co/300x220?text=Vocab1" alt="가치 이미지" style="width:100%; height:100%; object-fit:cover;">
+                                    <!-- [사용자 수정 영역] 아래 img 태그의 src="..." 부분을 실제 이미지 주소로 변경하세요 -->
+                                    <img src="https://placehold.co/250x180?text=Vocab+Image" style="width:100%; height:100%; object-fit:cover;" alt="단어 이미지">
                                 </div>
 
                                 <div class="vocab-text-area">
@@ -612,14 +640,14 @@
                                         <div class="vocab-label">뜻</div>
                                         <div class="vocab-desc">
                                             <span class="highlight-yellow">사물</span>이 지니고 있는 <span class="highlight-yellow">쓸모</span>.
-                                            <i data-lucide="volume-2" class="speaker-icon" size="24"></i>
+                                            <i data-lucide="volume-2" class="speaker-icon" size="24" onclick="alert('뜻 읽어주기')"></i>
                                         </div>
                                     </div>
                                     <div class="vocab-row">
                                         <div class="vocab-label ex">예문</div>
                                         <div class="vocab-desc">
                                             이 그림은 역사적 <span class="highlight-word">가치</span>가 높다.
-                                            <i data-lucide="volume-2" class="speaker-icon" size="24"></i>
+                                            <i data-lucide="volume-2" class="speaker-icon" size="24" onclick="alert('예문 읽어주기')"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -628,8 +656,6 @@
 
                         <!-- 두 번째 단어 카드 (보존) -->
                         <div class="vocab-card" id="vocab-card-2" style="display: none;">
-                            <!-- 두 번째 카드에는 화살표 없음 -->
-
                             <div class="vocab-main-title">보존</div>
                             
                             <div class="hanja-box">
@@ -638,10 +664,12 @@
                                 <div class="hanja-item"><span>存</span><div class="hanja-reveal" onclick="reveal(this, '있을 존', 2)">?</div></div>
                             </div>
                             
+                            <!-- 하단 레이아웃: 이미지 + 텍스트 -->
                             <div class="vocab-bottom-layout">
-                                <!-- 이미지 (사용자 교체용) -->
+                                <!-- 이미지 플레이스홀더 (Wrapper) -->
                                 <div class="vocab-img-placeholder">
-                                    <img src="https://placehold.co/300x220?text=Vocab2" alt="보존 이미지" style="width:100%; height:100%; object-fit:cover;">
+                                    <!-- [사용자 수정 영역] 아래 img 태그의 src="..." 부분을 실제 이미지 주소로 변경하세요 -->
+                                    <img src="https://placehold.co/250x180?text=Vocab+Image" style="width:100%; height:100%; object-fit:cover;" alt="단어 이미지">
                                 </div>
 
                                 <div class="vocab-text-area">
@@ -649,23 +677,28 @@
                                         <div class="vocab-label">뜻</div>
                                         <div class="vocab-desc">
                                             <span class="highlight-yellow">잘 보호하고 간직하여</span> 남김.
-                                            <i data-lucide="volume-2" class="speaker-icon" size="24"></i>
+                                            <i data-lucide="volume-2" class="speaker-icon" size="24" onclick="alert('뜻 읽어주기')"></i>
                                         </div>
                                     </div>
                                     <div class="vocab-row">
                                         <div class="vocab-label ex">예문</div>
                                         <div class="vocab-desc">
                                             문화재를 잘 <span class="highlight-word">보존</span>해야 한다.
-                                            <i data-lucide="volume-2" class="speaker-icon" size="24"></i>
+                                            <i data-lucide="volume-2" class="speaker-icon" size="24" onclick="alert('예문 읽어주기')"></i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- 다음 단어/단계 화살표 버튼 -->
+                        <button class="vocab-arrow-btn" id="next-word-btn" onclick="nextVocabCard()" style="margin-left: -30px; z-index: 1;">
+                            <i data-lucide="chevron-right" size="40"></i>
+                        </button>
+
                     </div>
                     
-                    <!-- 다했어요 버튼 (카드 바깥) -->
+                    <!-- [수정] 어휘랑 '다했어요' 버튼 영역 (카드 바깥) -->
                     <div id="vocab-done-container" class="done-btn-container" style="display:none;">
                         <button id="vocab-done-btn" class="writing-done-btn" disabled onclick="changeStep(1)">
                             다 했어요
@@ -675,7 +708,6 @@
                 </div>
             </div>
             
-            <!-- 게임 화면 생략 (기존 유지) -->
             <div id="vocab-step-2" class="vocab-step" style="display:none; height: 100%; flex-direction: column;">
                 <div class="center-wrapper">
                     <div class="instruction-banner">
@@ -717,6 +749,7 @@
                             </div>
                             
                             <div class="passage-image-wrapper">
+                                <!-- [사용자 수정 영역] 아래 img 태그의 src="..." 부분을 실제 이미지 주소로 변경하세요 -->
                                 <img src="https://placehold.co/400x300/e2e8f0/1e293b?text=Main+Image" 
                                      class="passage-image" 
                                      alt="본문 이미지">
@@ -1092,10 +1125,26 @@
         document.querySelectorAll('.vocab-card').forEach(card => card.style.display = 'none');
         document.getElementById(`vocab-card-${cardIndex}`).style.display = 'flex';
         
+        const prevBtn = document.getElementById('prev-word-btn');
+        const nextBtn = document.getElementById('next-word-btn');
         const doneContainer = document.getElementById('vocab-done-container');
 
-        // 마지막 카드일 때 다했어요 버튼 보임
-        if (cardIndex === totalVocabCards) {
+        // 이전 버튼 제어
+        if (cardIndex > 1) {
+            prevBtn.style.display = 'flex';
+        } else {
+            prevBtn.style.display = 'none';
+        }
+
+        // 다음 버튼 및 다했어요 버튼 제어
+        if (cardIndex < totalVocabCards) {
+            nextBtn.innerHTML = '<i data-lucide="chevron-right" size="40"></i>';
+            nextBtn.onclick = nextVocabCard;
+            nextBtn.style.display = 'flex'; 
+            doneContainer.style.display = 'none'; // 첫번째 카드에선 숨김
+        } else {
+            // 마지막 카드: 화살표 숨김, 다했어요 버튼 보임
+            nextBtn.style.display = 'none';
             doneContainer.style.display = 'flex';
             
             // 이미 완료된 상태인지 확인하여 버튼 상태 설정
@@ -1106,8 +1155,6 @@
             } else {
                 doneBtn.disabled = true;
             }
-        } else {
-            doneContainer.style.display = 'none';
         }
         
         // 별점 업데이트
