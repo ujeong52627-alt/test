@@ -31,7 +31,8 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
-        body { background-color: var(--bg-gray); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        /* flex-direction: column 추가하여 세로 정렬 가능하게 변경 */
+        body { background-color: var(--bg-gray); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         button, select { border: none; background: none; cursor: pointer; font-family: inherit; outline: none; }
         
         /* Scrollbar */
@@ -48,6 +49,17 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
             overflow: hidden; position: relative; 
             display: flex; flex-direction: column;
+            /* 아래쪽 저작권 문구와의 간격을 위해 마진 추가 */
+            margin-bottom: 0; 
+        }
+        
+        /* 저작권 푸터 스타일 */
+        .copyright-footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            font-weight: 500;
         }
 
         /* Common Utilities */
@@ -242,11 +254,42 @@
         .next-arrow { width: 50px; height: 50px; background: #444; color: white; border-radius: 12px; font-size: 20px; transition: 0.2s; }
         .next-arrow:hover { background: var(--primary-blue); }
 
+        /* [수정됨] 로딩 화면 CSS */
         #loading-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); z-index: 100; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .spinner { width: 60px; height: 60px; border: 6px solid #f3f3f3; border-top: 6px solid var(--primary-blue); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        
+        /* [수정] 로딩바를 텍스트 아래로 내리고 마진 수정 */
+        .loading-track {
+            width: 320px;
+            height: 16px;
+            background-color: #eee;
+            border-radius: 10px;
+            margin-top: 30px; /* 위쪽 여백 추가 */
+            margin-bottom: 0;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .loading-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #1e7df0, #00b0ff);
+            border-radius: 10px;
+            /* JS 애니메이션을 위한 기본 트랜지션 삭제 (애니메이션이 width 제어) */
+        }
+        
+        /* [수정] 끊김 없이 매끄럽게 차오르는 애니메이션 */
+        .loading-bar.fill-animation {
+            animation: gaugeFill 2.5s linear forwards;
+        }
+
+        /* [수정] 중간 단계 제거하여 끊김 방지 */
+        @keyframes gaugeFill {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
         .loading-text { font-size: 18px; font-weight: 700; color: var(--text-dark); }
         .loading-sub { font-size: 18px; color: var(--text-gray); margin-top: 5px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* 결과 리포트 CSS */
         #result-screen { padding: 30px; overflow-y: auto; padding-bottom: 50px; animation: slideUp 0.8s ease-out; }
@@ -278,18 +321,35 @@
         .level-item:last-child { border-bottom: none; }
         .level-item.active { background-color: #e3f2fd; color: var(--primary-blue); font-weight: bold; }
 
-        .tooltip-text { visibility: hidden; width: 200px; background-color: rgba(30, 30, 30, 0.95); color: #fff; text-align: center; border-radius: 8px; padding: 10px; position: absolute; z-index: 10000; bottom: 15px; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; font-size: 12px; line-height: 1.5; box-shadow: 0 4px 15px rgba(0,0,0,0.2); word-break: keep-all; }
-        .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: rgba(30, 30, 30, 0.95) transparent transparent transparent; }
+        .tooltip-text { 
+            visibility: hidden; width: 200px; background-color: rgba(30, 30, 30, 0.95); color: #fff; text-align: center; 
+            border-radius: 8px; padding: 10px; position: absolute; z-index: 10000; 
+            top: 60px; /* 기존 bottom 대신 top으로 변경하여 아래로 배치 */
+            left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; 
+            font-size: 12px; line-height: 1.5; box-shadow: 0 4px 15px rgba(0,0,0,0.2); word-break: keep-all; 
+        }
+        
+        .tooltip-text::after { 
+            content: ""; position: absolute; 
+            bottom: 100%; /* 화살표를 박스 위쪽으로 이동 */
+            top: auto;
+            left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; 
+            /* 화살표 방향: 위쪽 (아래쪽 색상 지정) */
+            border-color: transparent transparent rgba(30, 30, 30, 0.95) transparent; 
+        }
         .tooltip-text.show { visibility: visible; opacity: 1; }
 
-        /* [수정됨] Grid 비율을 하단과 동일하게 1.9fr : 1.1fr 로 변경하여 라인 맞춤 */
-        .top-summary-container { display: grid; grid-template-columns: 1.9fr 1.1fr; gap: 30px; margin-bottom: 40px; }
+        /* [수정됨] Grid 비율을 요청하신 픽셀(px)로 변경 */
+        /* 1200px (컨테이너) - 60px(패딩) - 30px(갭) = 1110px. 좌:780px, 우:330px */
+        .top-summary-container { display: grid; grid-template-columns: 780px 330px; gap: 30px; margin-bottom: 40px; }
         
-        /* [수정] 좌측 간격 40px -> 5px -> 20px로 변경 */
-        .summary-left { display: flex; gap: 20px; background: #f8f9fb; padding: 25px; border-radius: 15px; align-items: center; }
-        .summary-right { background: white; border: 1px solid #eee; border-radius: 15px; padding: 25px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 25px; }
+        /* [수정] 좌측 너비 설정 */
+        .summary-left { display: flex; gap: 20px; background: #f8f9fb; padding: 25px; border-radius: 15px; align-items: center; width: 100%; }
+        /* [수정] 우측 너비 설정 */
+        .summary-right { background: white; border: 1px solid #eee; border-radius: 15px; padding: 25px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 25px; width: 100%; }
         
-        .donut-chart-wrap { text-align: center; margin-left: 5px; }
+        /* [수정] 결과 변경 시 가로 너비 고정을 위해 width, flex-shrink 추가 */
+        .donut-chart-wrap { text-align: center; margin-left: 5px; width: 220px; flex-shrink: 0; }
         .donut-chart-svg { width: 180px; height: 180px; transform: rotate(-90deg); }
         .donut-bg-ring { fill: none; stroke: #eee; stroke-width: 25; } 
         .donut-prog-ring { fill: none; stroke: var(--primary-blue); stroke-width: 25; stroke-linecap: round; 
@@ -301,6 +361,8 @@
         .gauge-legend { display: flex; gap: 15px; font-size: 12px; color: #666; margin-bottom: 45px; align-self: flex-end; }
         .legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
         .legend-dot.my { background-color: var(--primary-blue); } .legend-dot.avg { background-color: #cce5ff; }
+        
+        /* [수정] 오른쪽 박스 너비(330px)에 맞춰 게이지 차트 크기를 다시 220px로 복원 */
         .gauge-chart-wrap { width: 220px; height: 110px; position: relative; margin-bottom: 15px; }
         .gauge-svg { width: 100%; height: 100%; overflow: visible; }
         .gauge-bg-arc { fill: none; stroke: #f0f3f9; stroke-width: 24; stroke-linecap: round; }
@@ -313,16 +375,26 @@
         .gauge-main-label { font-size: 22px; font-weight: bold; color: #333; }
         .gauge-main-label .highlight-blue { font-size: 28px; }
         
-        .summary-text-wrap { width: 100%; flex: 1; }
+        /* [수정] 텍스트 영역 너비 유동적용 min-width: 0 추가 */
+        .summary-text-wrap { width: 100%; flex: 1; min-width: 0; }
         .summary-title { font-size: 16px; margin-bottom: 15px; line-height: 1.6; color: var(--text-dark); text-align: center; word-break: keep-all; }
-        .summary-desc { font-size: 14px; line-height: 1.6; color: #555; background: white; padding: 15px; border-radius: 10px; white-space: nowrap; }
+        
+        /* [수정] 텍스트 줄바꿈 방지 설정: white-space: nowrap 추가 */
+        .summary-desc { 
+            font-size: 14px; line-height: 1.6; color: #555; background: white; padding: 15px; border-radius: 10px; 
+            word-break: keep-all; 
+            white-space: nowrap; /* 줄바꿈 금지 */
+        }
 
         .bottom-details-grid { display: grid; grid-template-columns: 1.9fr 1.1fr; gap: 30px; margin-bottom: 100px; }
         .graph-header { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px; }
         .avg-legend { font-size: 12px; color: #666; font-weight: normal; display: flex; align-items: center; gap: 6px; background: none; padding: 0; align-self: flex-end; margin-top: 5px; }
         .avg-icon-visual { width: 24px; height: 0; border-top: 3px dotted #aaccff; position: relative; display: inline-block; }
         .avg-icon-visual::after { content: ""; position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: white; border: 2px solid #aaccff; border-radius: 50%; }
-        .graph-container { display: flex; justify-content: space-around; align-items: flex-end; height: 200px; border-bottom: 1px solid #ddd; position: relative; padding-left: 30px; flex: 2; }
+        
+        /* [수정 1] margin-bottom 75px -> 40px로 변경: 사용자의 요청에 따라 여백을 줄임 */
+        .graph-container { display: flex; justify-content: space-around; align-items: flex-end; height: 200px; border-bottom: 1px solid #ddd; position: relative; padding-left: 30px; flex: 2; margin-bottom: 40px; }
+        
         .y-axis-grid { position: absolute; left: 30px; right: 0; bottom: 0; top: 0; pointer-events: none; z-index: 0; }
         .grid-line { position: absolute; left: 0; right: 0; border-top: 1px solid #f0f0f0; }
         .grid-label { position: absolute; left: -30px; width: 25px; text-align: right; font-size: 11px; color: #999; transform: translateY(-50%); }
@@ -339,16 +411,24 @@
         .label-icon.c3 { background-color: var(--col-crit); } .label-icon.c4 { background-color: var(--col-inf); } 
         .graph-help-btn { display: inline-flex; width: 14px; height: 14px; background-color: #ddd; color: white; border-radius: 50%; justify-content: center; align-items: center; font-size: 10px; cursor: pointer; flex-shrink: 0; }
         .graph-help-btn:hover { background-color: #bbb; }
+        
+        /* [수정] SVG 내부의 dot에 포인터 이벤트 활성화 */
         .svg-graph-layer { position: absolute; top: 0; left: 30px; right: 0; width: calc(100% - 30px); height: 100%; pointer-events: none; z-index: 2; }
         .avg-line { fill: none; stroke: #aaccff; stroke-width: 3px; stroke-dasharray: 6, 4; transition: all 1s ease; }
-        .avg-dot { fill: #fff; stroke: #aaccff; stroke-width: 3px; r: 6; transition: cy 1s ease; }
+        
+        /* [수정] 평균 점수 Dot에 커서 포인터 및 이벤트 활성화 */
+        .avg-dot { fill: #fff; stroke: #aaccff; stroke-width: 3px; r: 6; transition: cy 1s ease; pointer-events: auto; cursor: pointer; }
+        .avg-dot:hover { stroke: var(--primary-blue); stroke-width: 4px; r: 8; }
+        
         .tooltip-container { position: relative; display: flex; justify-content: center; }
 
         .insight-container { display: flex; flex-direction: column; gap: 15px; justify-content: flex-start; height: 100%; }
         .insight-wrapper { display: flex; flex-direction: column; gap: 15px; margin-top: 0; height: 100%; }
         .insight-box { border: 1px solid #ddd; padding: 15px 20px; border-radius: 12px; text-align: center; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .insight-label { font-size: 14px; color: #888; margin-bottom: 5px; } 
-        .insight-value { font-size: 18px; font-weight: bold; }
+        
+        /* [수정 2] 폰트 크기 18px -> 25px (약 140% 확대) */
+        .insight-value { font-size: 25px; font-weight: bold; }
 
         .guide-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 40px; }
         .guide-card { background: #fff; border: 1px solid #eee; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
@@ -373,9 +453,12 @@
         .program-box.basic .program-name { color: #bf360c; font-size: 19px; }
         .program-badge { font-size: 12px; margin-bottom: 10px; }
         .program-name { font-size: 18px; font-weight: bold; color: var(--text-dark); margin-bottom: 5px; }
-        .book-list { display: flex; gap: 10px; overflow-x: auto; width: 100%; padding-bottom: 5px; justify-content: center; }
-        .book-item { flex: 0 0 100px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .book-cover { width: 80px; height: 110px; border-radius: 2px 6px 6px 2px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: white; text-align: center; padding: 5px; position: relative; box-shadow: 3px 3px 8px rgba(0,0,0,0.2); transition: transform 0.2s; }
+        
+        /* [수정] 책 리스트 간격 및 책 표지 사이즈 수정 */
+        .book-list { display: flex; gap: 30px; overflow-x: auto; width: 100%; padding-bottom: 5px; justify-content: center; }
+        .book-item { flex: 0 0 110px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        /* width: 80px -> 100px로 변경 */
+        .book-cover { width: 100px; height: 130px; border-radius: 2px 6px 6px 2px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: white; text-align: center; padding: 5px; position: relative; box-shadow: 3px 3px 8px rgba(0,0,0,0.2); transition: transform 0.2s; }
         .book-cover::before { content: ""; position: absolute; left: 4px; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.2); }
         .book-cover:hover { transform: translateY(-2px); }
         .book-color-1 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
@@ -385,11 +468,19 @@
         .book-emoji { font-size: 24px; display: block; margin-bottom: 5px; }
         .book-title-on-cover { font-size: 13px; line-height: 1.3; font-weight: 800; }
         .book-title { font-size: 12px; text-align: center; line-height: 1.3; margin-top: 5px; }
-        .btn-list { width: 100%; display: flex; flex-direction: column; gap: 8px; }
-        .rec-btn { width: 100%; padding: 10px; background: white; border: 1px solid #1e7df0; color: #1e7df0; font-weight: 700; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        .rec-btn:hover { background: #1e7df0; color: white; }
-        .rec-btn.black { border-color: #333; color: #333; }
-        .rec-btn.black:hover { background: #333; color: white; }
+        
+        /* [수정] 버튼 리스트를 세로 3분할로 변경 */
+        .btn-list { width: 100%; height: 100%; display: flex; flex-direction: column; gap: 10px; }
+        .rec-btn { 
+            width: 100%; flex: 1; /* 높이 균등 분할 */
+            display: flex; justify-content: center; align-items: center; /* 내용 중앙 정렬 */
+            padding: 0 10px; /* 패딩 초기화 */
+            background: white; border: 1px solid #ddd; 
+            color: #555; font-weight: 700; 
+            border-radius: 8px; cursor: pointer; transition: 0.2s; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 카드 느낌 그림자 */
+        }
+        .rec-btn:hover { background: #f0f8ff; border-color: #1e7df0; color: #1e7df0; transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -504,8 +595,14 @@
         </div>
     </div>
 
-    <!-- 로딩 화면 -->
-    <div id="loading-screen"><div class="spinner"></div><div class="loading-text">결과 분석 중입니다...</div><div class="loading-sub">AI가 <strong>[김엘리]님</strong>의 답안을 채점하고 있어요.</div></div>
+    <!-- 로딩 화면 (수정됨: 텍스트가 위, 로딩바가 아래) -->
+    <div id="loading-screen">
+        <div class="loading-text">결과 분석 중입니다...</div>
+        <div class="loading-sub">AI가 <strong>[김엘리]님</strong>의 답안을 채점하고 있어요.</div>
+        <div class="loading-track">
+            <div class="loading-bar" id="loading-bar"></div>
+        </div>
+    </div>
 
     <!-- 퀴즈 화면 -->
     <div id="quiz-screen">
@@ -520,7 +617,7 @@
         </div>
         <div class="question-step" id="q2">
             <div class="split-layout">
-               <div class="passage-area">
+                <div class="passage-area">
             <div class="passage-content" style="line-height: 1.8; font-size: 16px; word-break: keep-all; text-align: justify; color: #333;">
                 <strong style="display:block; font-size: 18px; margin-bottom: 20px; color: #000;">
                     제목: 자연의 청소부, 파리의 한살이
@@ -594,9 +691,9 @@
 
         <div class="top-summary-container">
             <div class="summary-left">
-                <!-- [수정] SVG 기반 도넛 차트로 변경 -->
+                <!-- SVG 기반 도넛 차트 -->
                 <div class="donut-chart-wrap">
-                    <div style="position: relative; width: 180px; height: 180px;">
+                    <div style="position: relative; width: 180px; height: 180px; margin: 0 auto;">
                         <svg class="donut-chart-svg" viewBox="0 0 180 180">
                             <circle class="donut-bg-ring" cx="90" cy="90" r="75"></circle>
                             <circle class="donut-prog-ring" id="scoreDonut" cx="90" cy="90" r="75"></circle>
@@ -634,9 +731,12 @@
             <div>
                 <div class="graph-header">
                     <div class="section-title-pill">영역별 수준 그래프</div>
-                    <div class="avg-legend"><span class="avg-icon-visual"></span> &lt;학년 평균&gt;</div>
+                    <div class="avg-legend"><span class="avg-icon-visual"></span>&#58;&#160; 학년 평균 점수</div>
                 </div>
                 <div class="graph-container">
+                    <!-- [수정] 툴팁 DIV 추가 -->
+                    <div id="graph-avg-tooltip" class="klq-tooltip" style="width: auto; padding: 6px 10px; min-width: 140px; transform: translateX(-50%); white-space: nowrap;"></div>
+
                     <div class="y-axis-grid"><div class="grid-line" style="bottom:0%"></div><div class="grid-label" style="bottom:0%">0</div><div class="grid-line" style="bottom:50%"></div><div class="grid-label" style="bottom:50%">50</div><div class="grid-line" style="bottom:100%"></div><div class="grid-label" style="bottom:100%">100</div></div>
                     
                     <svg class="svg-graph-layer" viewBox="0 0 500 200" preserveAspectRatio="none">
@@ -723,9 +823,15 @@
                 <div class="book-list" id="rec-book-list"></div>
             </div>
             <div class="plus-icon">+</div>
-            <div class="rec-group"><div class="rec-title">비교과 콘텐츠</div><div class="btn-list"><button class="rec-btn">엘리하이 북클럽</button><button class="rec-btn black">글로벌 리더십</button><button class="rec-btn black">수행평가+</button></div></div>
+            <!-- [수정] 이모지 추가된 텍스트 -->
+            <div class="rec-group"><div class="rec-title">비교과 콘텐츠</div><div class="btn-list"><button class="rec-btn">📚 엘리하이 북클럽 📚</button><button class="rec-btn">🌍 글로벌 리더십 🤝</button><button class="rec-btn">📝 수행평가+ 💯</button></div></div>
         </div>
     </div>
+</div>
+
+<!-- [추가] 저작권 푸터 (화면 바깥쪽) -->
+<div class="copyright-footer">
+    © 2025 유초등사업본부 유초등컨텐츠기획부문 멀티미디어기획팀. All Rights Reserved.
 </div>
 
 <script>
@@ -743,7 +849,7 @@
             correct: 17, time: 23, scores: [95, 82, 87, 50], avgScores: [50, 65, 45, 40],
             summaryLevel: '[머큐리💎]', summaryKlq: '[4.8]', summaryCourse: '[응용 코스]',
             gradeLevel: "초등 4학년 8개월 수준",
-            desc: "<strong>김엘리</strong>님은 어휘력과 사실적 비판력이 아주 뛰어나요. <br> 전반적으로 문해력 실력이 고르게 좋은 편이에요. <br> 이제 추론적 독해력만 강화하면 더 높은 단계로 갈 수 있어요.",
+            desc: "<strong>김엘리</strong>님은 어휘력과 사실적 독해력이 아주 뛰어나요. <br> 글을 읽고 중요한 내용을 차분하게 이해하는 힘이 잘 자리 잡혀 있어요. <br> 이제 추론적 독해력만 조금 더 키우면, 한 단계 더 성장할 수 있을 거예요.",
             bestArea: { text: "⭐ 어휘력", color: "var(--col-vocab)" },
             worstArea: { text: "⚠ 추론적 독해력", color: "var(--col-inf)" },
             guideLevels: { vocab: "(매우 우수)", fact: "(우수)", crit: "(우수)", inf: "(보완 필요)" },
@@ -764,7 +870,7 @@
             correct: 12, time: 35, scores: [40, 90, 60, 50], avgScores: [60, 55, 45, 48],
             summaryLevel: '[마스 🔥]', summaryKlq: '[2.5]', summaryCourse: '[기본 코스]',
             gradeLevel: "초등 2학년 5개월 수준",
-            desc: "<strong>김엘리</strong>님은 사실적 독해력이 눈에 띄게 강한 편이에요. <br> 이제 어휘력만 조금 보완하면 독해 실력이 훨씬 좋아질 거예요. <br> 비판적·추론적 독해력도 계속 꾸준히 키워 보세요.",
+            desc: "<strong>김엘리</strong>님은 사실적 독해력이 눈에 띄게 강한 편이에요. <br> 글 속 정보를 빠르게 파악하는 힘이 좋아 앞으로의 성장이 기대돼요. <br> 앞으로 어휘력과 추론력을 차근차근 쌓으면 더 멋진 독해 실력을 만들 수 있어요.",
             bestArea: { text: "⭐ 사실적 독해력", color: "var(--col-fact)" },
             worstArea: { text: "⚠ 어휘력", color: "var(--col-vocab)" },
             guideLevels: { vocab: "(보완 필요)", fact: "(매우 우수)", crit: "(보통)", inf: "(보완 필요)" },
@@ -798,17 +904,25 @@
         const now = audioCtx.currentTime;
         const osc = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
 
-        if (type === 'tick') {
-            osc.frequency.setValueAtTime(800, now);
-            osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
-            gainNode.gain.setValueAtTime(0.7, now);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-            osc.start();
-            osc.stop(now + 0.1);
+        if (type === 'charging') {
+            // [수정] 게이지가 차오르는 느낌의 상승하는 소리 (약 2.5초)
+            osc.type = 'triangle'; 
+            // 주파수: 300Hz(시작) -> 800Hz(끝) 상승
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.linearRampToValueAtTime(800, now + 2.5);
+            
+            // 볼륨: 부드럽게 시작해서 끝날 때 페이드 아웃
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.1, now + 0.1);
+            gainNode.gain.setValueAtTime(0.1, now + 2.3);
+            gainNode.gain.linearRampToValueAtTime(0, now + 2.5);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 2.5);
+
         } else if (type === 'result') {
             const notes = [523.25, 659.25, 783.99, 1046.50];
             notes.forEach((freq, i) => {
@@ -855,22 +969,26 @@
             if(currentStep === 2) document.getElementById('badge-reading').classList.add('active');
             document.getElementById('progress-text').textContent = `${currentStep} / ${totalSteps}`; 
         } else { 
+            // 퀴즈 종료 및 로딩 화면 시작
             document.getElementById('quiz-screen').style.display = 'none'; 
             document.getElementById('loading-screen').style.display = 'flex';
             
-            // 로딩 효과 (setInterval 사용)
-            let tickCount = 0;
-            const loadingInterval = setInterval(() => {
-                playTone('tick');
-                tickCount++;
-                if(tickCount >= 3) clearInterval(loadingInterval);
-            }, 800);
+            // [수정] 1. 새로운 차오르는 효과음 재생 (약 2.5초)
+            playTone('charging');
 
-            // [수정] 2500ms -> 3200ms로 간격 늘림
+            // [수정] 2. CSS 애니메이션 트리거 (게이지 바 채우기)
+            const loadingBar = document.getElementById('loading-bar');
+            loadingBar.classList.remove('fill-animation'); // 리셋
+            void loadingBar.offsetWidth; // 리플로우 강제 (애니메이션 재시작용)
+            loadingBar.classList.add('fill-animation');
+
+            // [수정] 3. 결과 화면 전환 타이밍 조절
+            // 소리(2.5초) + 여유 시간(1초) = 총 3.5초 뒤 결과 화면 표시
+            // 이렇게 하면 로딩 소리가 끝나고 정적이 흐른 뒤 짠! 하고 결과가 나옵니다.
             setTimeout(() => { 
                 document.getElementById('loading-screen').style.display = 'none'; 
                 showResult(); 
-            }, 3200); 
+            }, 3500); 
         } 
     }
     
@@ -978,14 +1096,48 @@
 
     function updateAvgGraph(avgScores) {
         const xCoords = [62.5, 187.5, 312.5, 437.5];
+        // 툴팁용 영역 이름 배열
+        const categories = ["어휘력", "사실적 독해력", "비판적 독해력", "추론적 독해력"];
+        
         let pointsString = "";
         const dots = document.querySelectorAll('.svg-graph-layer .avg-dot');
+        const tooltip = document.getElementById('graph-avg-tooltip');
         
         avgScores.forEach((score, i) => {
             const x = xCoords[i];
             const y = 200 - (score * 1.8);
             pointsString += `${x},${y} `;
-            if(dots[i]) { dots[i].setAttribute('cx', x); dots[i].setAttribute('cy', y); }
+            
+            if(dots[i]) { 
+                dots[i].setAttribute('cx', x); 
+                dots[i].setAttribute('cy', y); 
+                
+                // [수정] 툴팁 표시 로직 분리
+                const showTooltip = () => {
+                    tooltip.innerHTML = `${categories[i]} <br>학년 평균: <strong>${score}점</strong>`;
+                    // [좌표 수정] 왼쪽 여백 30px을 고려하여 정확한 % 계산
+                    // 30px (고정 여백) + (나머지 100%-30px 영역에서 x가 차지하는 비율)
+                    const ratio = x / 500;
+                    tooltip.style.left = `calc(30px + (100% - 30px) * ${ratio})`;
+                    
+                    // [위치 수정] 점 아래에 툴팁 표시 (y + 여백)
+                    tooltip.style.top = `${y + 15}px`; 
+                    tooltip.classList.add('show');
+                };
+
+                // [수정] 점 마우스 오버 시 툴팁 표시
+                dots[i].onmouseenter = showTooltip;
+                
+                // [추가] 터치/클릭 시에도 툴팁 표시 (태블릿 대응)
+                dots[i].onclick = (e) => {
+                    e.stopPropagation(); // 이벤트 버블링 방지 (배경 클릭 시 닫힘과 충돌 방지)
+                    showTooltip();
+                };
+                
+                dots[i].onmouseleave = () => {
+                    tooltip.classList.remove('show');
+                };
+            }
         });
         document.querySelector('.avg-line').setAttribute('points', pointsString.trim());
     }
