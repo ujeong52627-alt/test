@@ -257,11 +257,18 @@
         /* [수정됨] 로딩 화면 CSS */
         #loading-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); z-index: 100; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         
-        /* [추가] 로딩 화면 로봇 아이콘 스타일 */
+        /* [수정] 로딩 화면 로봇 SVG 스타일 (CSS 변경) */
         .loading-icon {
-            font-size: 80px; /* 이모지 크기 */
+            width: 180px;  /* 너비 지정 */
+            height: 180px; /* 높이 지정 */
             margin-bottom: 20px; /* 텍스트와의 간격 */
             animation: robotBounce 0.8s infinite ease-in-out alternate; /* 둥실둥실 효과 */
+        }
+        /* SVG 내부 요소가 부모 크기에 맞도록 설정 */
+        .loading-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
         /* [추가] 로봇 움직임 애니메이션 */
@@ -403,16 +410,32 @@
         .graph-header { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px; }
         .avg-legend { font-size: 12px; color: #666; font-weight: normal; display: flex; align-items: center; gap: 6px; background: none; padding: 0; align-self: flex-end; margin-top: 5px; }
         
-        /* [수정됨] 범례 아이콘: 동그라미 점선 제거 -> 납작한 선(Dashed Line)으로 변경 */
+        /* [수정됨] 범례 아이콘: - O - 형태 (점선 + 중앙 원) */
         .avg-icon-visual { 
-            width: 30px; 
+            width: 32px; 
             height: 0; 
-            border-top: 3px dashed #aaccff; /* 그래프 선과 동일한 스타일 */
+            border-top: 3px dashed #aaccff; /* 점선 스타일 */
             display: inline-block; 
             vertical-align: middle;
+            position: relative; /* ::after 배치를 위한 기준 */
+            margin-right: 4px;
         }
-        /* 기존 after(동그라미) 제거 */
-        .avg-icon-visual::after { display: none; }
+        
+        /* [추가] 중앙에 동그라미 배치 */
+        .avg-icon-visual::after { 
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            background-color: white; /* 내부 흰색 채움 */
+            border: 2px solid #aaccff; /* 테두리 색상 */
+            border-radius: 50%; /* 원형 */
+            position: absolute;
+            top: -5px; /* 선 두께와 원 크기를 고려한 중앙 정렬 */
+            left: 50%;
+            transform: translateX(-50%);
+            box-sizing: border-box;
+        }
         
         /* [수정 1] margin-bottom 75px -> 40px로 변경: 사용자의 요청에 따라 여백을 줄임 */
         .graph-container { display: flex; justify-content: space-around; align-items: flex-end; height: 200px; border-bottom: 1px solid #ddd; position: relative; padding-left: 30px; flex: 2; margin-bottom: 40px; }
@@ -479,15 +502,43 @@
         /* [수정] 책 리스트 간격 및 책 표지 사이즈 수정 */
         .book-list { display: flex; gap: 30px; overflow-x: auto; width: 100%; padding-bottom: 5px; justify-content: center; }
         .book-item { flex: 0 0 110px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        /* width: 80px -> 100px로 변경 */
-        .book-cover { width: 100px; height: 130px; border-radius: 2px 6px 6px 2px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: white; text-align: center; padding: 5px; position: relative; box-shadow: 3px 3px 8px rgba(0,0,0,0.2); transition: transform 0.2s; }
-        .book-cover::before { content: ""; position: absolute; left: 4px; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.2); }
-        .book-cover:hover { transform: translateY(-2px); }
-        .book-color-1 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-        .book-color-2 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-        .book-color-3 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); }
-        .book-color-4 { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
-        .book-emoji { font-size: 24px; display: block; margin-bottom: 5px; }
+        
+        /* [수정] 퀄리티 높은 그림자와 라운딩 적용 */
+        .book-cover { 
+            width: 100px; height: 130px; 
+            /* 1. 더 둥글고 부드러운 모서리 */
+            border-radius: 16px;
+            overflow: hidden; 
+            position: relative; 
+            
+            /* 2. 기존의 진한 그림자 제거 -> 부드럽고 넓게 퍼지는 그림자로 변경 */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03);
+            
+            /* 3. 아주 얇은 테두리로 깔끔함 더하기 */
+            border: 1px solid rgba(0,0,0,0.04);
+            
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            background-color: #fff; /* 배경을 흰색으로 변경하여 이미지와 자연스럽게 어우러짐 */
+            
+            /* 렌더링 최적화 */
+            transform: translateZ(0);
+        }
+        
+        /* 4. 마우스 오버 시 떠오르는 효과 및 은은한 파란색 그림자 */
+        .book-cover:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 30px rgba(30, 125, 240, 0.15); 
+        }
+
+        .book-cover img {
+            width: 100%; height: 100%;
+            object-fit: cover; /* 이미지가 영역을 꽉 채우도록 */
+            display: block;
+        }
+        /* 기존 그라디언트 및 이모지 스타일은 더 이상 필요 없으므로 삭제하거나 무시 */
+        .book-color-1, .book-color-2, .book-color-3, .book-color-4 { background: none; }
+        .book-emoji { display: none; }
+        
         .book-title-on-cover { font-size: 13px; line-height: 1.3; font-weight: 800; }
         .book-title { font-size: 12px; text-align: center; line-height: 1.3; margin-top: 5px; }
         
@@ -619,8 +670,37 @@
 
     <!-- 로딩 화면 (수정됨: 텍스트가 위, 로딩바가 아래 + AI 로봇 이모지 추가) -->
     <div id="loading-screen">
-        <!-- AI 로봇 이모지 추가 -->
-        <div class="loading-icon">🤖</div>
+        <!-- AI 로봇 이모지를 SVG 코드로 교체 -->
+        <div class="loading-icon">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Headphones Band -->
+                <path d="M15 55 C15 25 25 10 50 10 C75 10 85 25 85 55" stroke="#00b0ff" stroke-width="8" stroke-linecap="round"/>
+                
+                <!-- Left Ear -->
+                <rect x="5" y="45" width="12" height="24" rx="4" fill="#0091ea"/>
+                <!-- Right Ear -->
+                <rect x="83" y="45" width="12" height="24" rx="4" fill="#0091ea"/>
+                
+                <!-- Head -->
+                <circle cx="50" cy="55" r="35" fill="white" stroke="#333" stroke-width="2.5"/>
+                
+                <!-- Face Area (Visor) -->
+                <path d="M22 50 C22 38 32 32 50 32 C68 32 78 38 78 50 C78 65 68 73 50 73 C32 73 22 65 22 50 Z" fill="#455a64"/>
+                
+                <!-- Eyes -->
+                <circle cx="38" cy="50" r="5" fill="#00e5ff"/>
+                <circle cx="62" cy="50" r="5" fill="#00e5ff"/>
+                
+                <!-- Mouth -->
+                <path d="M42 60 Q50 66 58 60" stroke="#00e5ff" stroke-width="3" stroke-linecap="round"/>
+                
+                <!-- Head Detail (Top Mark) -->
+                <rect x="46" y="22" width="8" height="3" rx="1.5" fill="#333"/>
+                
+                <!-- Microphone -->
+                <path d="M10 55 Q15 85 45 78" stroke="#333" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>
         
         <div class="loading-text">결과 분석 중입니다...</div>
         <div class="loading-sub">AI가 <strong>[김엘리]님</strong>의 답안을 채점하고 있어요.</div>
@@ -743,8 +823,8 @@
                 <div class="gauge-chart-container">
                     <div class="gauge-legend"><div><span class="legend-dot my"></span> 나의 풀이 시간</div><div><span class="legend-dot avg"></span> 평균 풀이 시간</div></div>
                     <div class="gauge-chart-wrap">
-                        <svg class="gauge-svg" viewBox="0 0 200 105"><path class="gauge-bg-arc" d="M 20 100 A 80 80 0 0 1 180 100" /><path class="gauge-my-arc" d="M 20 100 A 80 80 0 0 1 180 100" /></svg>
                         <div class="gauge-character" id="gaugeChar"><span>나</span></div>
+                        <svg class="gauge-svg" viewBox="0 0 200 105"><path class="gauge-bg-arc" d="M 20 100 A 80 80 0 0 1 180 100" /><path class="gauge-my-arc" d="M 20 100 A 80 80 0 0 1 180 100" /></svg>
                         <div class="gauge-avg-label" id="gaugeAvgLabel">36분</div>
                     </div>
                     <div class="gauge-bottom-text"><div class="gauge-sub-label">나의 풀이 시간</div><div class="gauge-main-label"><span class="highlight-blue" id="my-time">23</span>분 / 50분</div></div>
@@ -885,9 +965,10 @@
                 inf: "글 속 단서를 모아 숨겨진 정보를 짐작하는 능력을 더 키우면 좋아요. 문맥을 통해 인물의 감정 변화나 사건의 흐름을 추론하는 연습을 집중적으로 해 보세요. ‘왜 이렇게 했을까?’, ‘다음에는 어떤 일이 일어날까?’ 같은 질문을 스스로 던지며 읽으면 추론 능력이 크게 자라요."
             },
             recommendation: { type: 'advanced', badge: '<응용 코스>', title: '🚀 문해력 업그레이드', desc: '구조 문해 공식으로 지문 읽기' },
+            // [수정] 책 데이터를 이미지 경로와 강사 이름으로 변경
             books: [
-                { title: "문해력을<br>부탁해 3", subTitle: "문해력을 부탁해<br>3편", emoji: "📘", color: "book-color-1" },
-                { title: "뿌리깊은<br>독해력 3", subTitle: "뿌리깊은 초등국어<br>독해력 3단계", emoji: "🌳", color: "book-color-2" }
+                { title: "뿌리깊은<br>초등국어 독해력", subTitle: "맹지현 선생님", image: "teacher_maeng.jpg" },
+                { title: "빠작 초등 국어<br>비문학 독해", subTitle: "윤지영 선생님", image: "teacher_yoon.jpg" }
             ]
         },
         prev: {
@@ -907,8 +988,8 @@
             },
             recommendation: { type: 'basic', badge: '<기본 코스>', title: '🌱 문해력 기본 완성', desc: '독해의 핵심 전략 익히기' },
             books: [
-                { title: "문해력을<br>부탁해 2", subTitle: "문해력을 부탁해<br>2편", emoji: "📙", color: "book-color-3" },
-                { title: "빠작<br>비문학 1", subTitle: "빠작 초등 국어<br>비문학 독해 1단계", emoji: "⚡", color: "book-color-4" }
+                { title: "뿌리깊은<br>초등 국어 독해력", subTitle: "맹지현 선생님", image: "teacher_maeng.jpg" },
+                { title: "빠작 초등 국어<br>비문학 독해", subTitle: "윤지영 선생님", image: "teacher_yoon.jpg" }
             ]
         }
     };
@@ -1080,14 +1161,17 @@
         setHTML('rec-prog-desc', data.recommendation.desc);
         recBox.className = `program-box ${data.recommendation.type}`; // 클래스 초기화 후 추가
 
-        // 책 리스트 업데이트
+        // [수정] 책 리스트 업데이트 로직 수정 (이미지 태그 사용)
         const bookList = document.getElementById('rec-book-list');
         bookList.innerHTML = data.books.map(book => `
             <div class="book-item">
-                <div class="book-cover ${book.color}">
-                    <div><span class="book-emoji">${book.emoji}</span><div class="book-title-on-cover">${book.title}</div></div>
+                <div class="book-cover">
+                    <img src="${book.image}" alt="${book.subTitle}" onerror="this.src='https://placehold.co/100x130/e0f7fa/006064?text=Teacher'">
                 </div>
-                <div class="book-title">${book.subTitle}</div>
+                <div class="book-title">
+                    <span style="font-weight:bold; color:#333; font-size:13px;">${book.subTitle}</span><br>
+                    <span style="font-size:11px; color:#888;">${book.title}</span>
+                </div>
             </div>
         `).join('');
 
