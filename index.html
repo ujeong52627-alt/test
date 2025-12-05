@@ -18,8 +18,8 @@
             --bg-gray: #f2f2f2;
             --title-bg: #e9ecef;
             
-            /* Chart Colors */
-            --col-vocab: #1e7df0; 
+            /* Chart Colors - [수정됨] 어휘력 색상 보라색으로 변경 */
+            --col-vocab: #9c27b0; 
             --col-fact: #00c896;  
             --col-crit: #ffb300;  
             --col-inf: #ff5252;   
@@ -257,6 +257,19 @@
         /* [수정됨] 로딩 화면 CSS */
         #loading-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); z-index: 100; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         
+        /* [추가] 로딩 화면 로봇 아이콘 스타일 */
+        .loading-icon {
+            font-size: 80px; /* 이모지 크기 */
+            margin-bottom: 20px; /* 텍스트와의 간격 */
+            animation: robotBounce 0.8s infinite ease-in-out alternate; /* 둥실둥실 효과 */
+        }
+
+        /* [추가] 로봇 움직임 애니메이션 */
+        @keyframes robotBounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-15px); }
+        }
+        
         /* [수정] 로딩바를 텍스트 아래로 내리고 마진 수정 */
         .loading-track {
             width: 320px;
@@ -389,8 +402,17 @@
         .bottom-details-grid { display: grid; grid-template-columns: 1.9fr 1.1fr; gap: 30px; margin-bottom: 100px; }
         .graph-header { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px; }
         .avg-legend { font-size: 12px; color: #666; font-weight: normal; display: flex; align-items: center; gap: 6px; background: none; padding: 0; align-self: flex-end; margin-top: 5px; }
-        .avg-icon-visual { width: 24px; height: 0; border-top: 3px dotted #aaccff; position: relative; display: inline-block; }
-        .avg-icon-visual::after { content: ""; position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: white; border: 2px solid #aaccff; border-radius: 50%; }
+        
+        /* [수정됨] 범례 아이콘: 동그라미 점선 제거 -> 납작한 선(Dashed Line)으로 변경 */
+        .avg-icon-visual { 
+            width: 30px; 
+            height: 0; 
+            border-top: 3px dashed #aaccff; /* 그래프 선과 동일한 스타일 */
+            display: inline-block; 
+            vertical-align: middle;
+        }
+        /* 기존 after(동그라미) 제거 */
+        .avg-icon-visual::after { display: none; }
         
         /* [수정 1] margin-bottom 75px -> 40px로 변경: 사용자의 요청에 따라 여백을 줄임 */
         .graph-container { display: flex; justify-content: space-around; align-items: flex-end; height: 200px; border-bottom: 1px solid #ddd; position: relative; padding-left: 30px; flex: 2; margin-bottom: 40px; }
@@ -435,7 +457,7 @@
         .guide-header { padding: 12px; text-align: center; font-weight: 700; color: #333; font-size: 15px; }
         .level-tag { font-size: 0.9em; font-weight: normal; margin-left: 3px; }
         .guide-body { padding: 15px; font-size: 13px; line-height: 1.6; color: #555; background-color: #fcfcfc; flex: 1; word-break: keep-all; }
-        .guide-card.c1 .guide-header { background-color: rgba(30, 125, 240, 0.15); color: var(--col-vocab); } 
+        .guide-card.c1 .guide-header { background-color: rgba(156, 39, 176, 0.15); color: var(--col-vocab); } 
         .guide-card.c2 .guide-header { background-color: rgba(0, 200, 150, 0.15); color: var(--col-fact); } 
         .guide-card.c3 .guide-header { background-color: rgba(255, 179, 0, 0.15); color: var(--col-crit); } 
         .guide-card.c4 .guide-header { background-color: rgba(255, 82, 82, 0.15); color: var(--col-inf); }
@@ -595,8 +617,11 @@
         </div>
     </div>
 
-    <!-- 로딩 화면 (수정됨: 텍스트가 위, 로딩바가 아래) -->
+    <!-- 로딩 화면 (수정됨: 텍스트가 위, 로딩바가 아래 + AI 로봇 이모지 추가) -->
     <div id="loading-screen">
+        <!-- AI 로봇 이모지 추가 -->
+        <div class="loading-icon">🤖</div>
+        
         <div class="loading-text">결과 분석 중입니다...</div>
         <div class="loading-sub">AI가 <strong>[김엘리]님</strong>의 답안을 채점하고 있어요.</div>
         <div class="loading-track">
@@ -831,7 +856,7 @@
 
 <!-- [추가] 저작권 푸터 (화면 바깥쪽) -->
 <div class="copyright-footer">
-    © 2025 유초등사업본부 유초등컨텐츠기획부문 멀티미디어기획팀. All Rights Reserved.
+    © 2025 유초중사업본부 유초등컨텐츠기획부문 멀티미디어기획팀. All Rights Reserved.
 </div>
 
 <script>
