@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>인트로</title>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="is-intro">
+    <div id="app-container">
+        <div class="content-area">
+            <div id="intro-screen" class="screen intro-bg">
+                
+                <div class="book-stage">
+                    <div class="book-container">
+                        
+                        <div class="book-page right-page">
+                            <div class="page-content right-content">
+                                <img src="imgs/intro_illust.png" alt="일러스트" class="intro-illust" onerror="this.src='https://placehold.co/400x500/e0f2fe/1e40af?text=경복궁+일러스트'">
+                            </div>
+                        </div>
+
+                        <div class="book-page flip-page">
+                            <div class="page-face page-front">
+                                <div class="cover-design">
+                                    <div class="cover-spine"></div> <div class="cover-title-box">
+                                        <div class="cover-main-title">오늘 8분 문해</div>
+                                        <div class="cover-sub-title">[응용] 4개월 2주차</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="page-face page-back">
+                                <div class="page-content left-content">
+                                    <div class="intro-badge">문화유산(1)</div>
+                                    <div class="intro-main-title">역사를 품은 기와,<br>경복이</div>
+                                    <div class="intro-char-img">
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <button class="start-btn intro-start-btn-pos" onclick="location.href='vocab.html'">시작하기</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <audio id="guide-audio"></audio> 
+    <script src="script.js"></script>
+</body>
+</html>
