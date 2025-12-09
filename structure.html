@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구조랑 - 메가스터디 초등 문해력</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <header id="app-header">
+            <div class="logo"><span>오늘 8분 문해</span> [응용]</div>
+            <div style="display: flex; align-items: center;">
+               <div class="close-app-btn" onclick="location.href='index.html'">
+                   <i data-lucide="x" size="28"></i>
+               </div>
+            </div>
+        </header>
+
+        <div id="app-tabs" class="tabs">
+            <button class="tab-btn tab-vocab" onclick="location.href='vocab.html'"><i data-lucide="lightbulb" size="18"></i> 어휘랑</button>
+            <button class="tab-btn tab-read" onclick="location.href='read.html'"><i data-lucide="book-open" size="18"></i> 읽기랑</button>
+            <button class="tab-btn tab-structure active" onclick="location.href='structure.html'"><i data-lucide="layout" size="18"></i> 구조랑</button>
+            <button class="tab-btn tab-write" onclick="location.href='write.html'"><i data-lucide="pen-tool" size="18"></i> 쓰기랑</button>
+        </div>
+
+        <div class="content-area">
+            <div id="structure-screen" class="screen">
+                
+                <div id="structure-step-0" class="structure-step" style="height: 100%; display: flex; flex-direction: column;">
+                    <div class="structure-intro-bg">
+                        <div class="structure-title-banner">글을 더 깊게 읽는 비밀 열쇠 '구조랑'</div>
+                        <div class="structure-card">
+                            <div class="structure-card-header">
+                                <i data-lucide="lightbulb" size="20"></i> 오늘의 문해 공식
+                            </div>
+                            <h2 class="structure-main-title">'상징' 이해하기</h2>
+                            <div class="structure-list">
+                                <div class="structure-item"><span class="structure-badge">개념</span> '상징'이란 무엇일까요?</div>
+                                <div class="structure-item"><span class="structure-badge">적용</span> 글 속 기와들은 무엇을 나타낼까요?</div>
+                                <div class="structure-item"><span class="structure-badge">훈련</span> 글 속 상징을 이해하며 주제를 파악해 보아요.</div>
+                            </div>
+                        </div>
+                        <button class="structure-start-btn" onclick="changeStep(1)">시작하기</button>
+                    </div>
+                </div>
+
+                <div id="structure-step-1" class="structure-step" style="height:100%; display:none; flex-direction:column;">
+                    <div class="instruction-banner">
+                        <span>빈칸을 눌러 '상징'에 대해 알아봅시다.</span>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-tag"><i data-lucide="key" size="16"></i> 오늘의 문해 공식</div>
+                        <div class="formula-sub-tag">개념</div>
+                        <span>'상징'이란 무엇일까요?</span>
+                    </div>
+                    <div class="concept-container">
+                        <div class="definition-row">
+                            <div class="def-label">상징</div>
+                            <div class="def-content" onclick="revealConceptDef(this)">
+                                <div class="def-placeholder">?</div>
+                                <div class="def-text">
+                                    눈에 보이는 하나의 대상에, 더 큰 의미를 담아 표현하는 방법.<br>
+                                    → 작가가 하나의 대상을 통해 더 큰 생각이나 주제를 표현하는 방법.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example-section">
+                            <div class="ex-label-vertical">예시</div>
+                            <div class="ex-cards-grid">
+                                <div class="ex-item">
+                                    <div class="ex-img-box"><img src="imgs/dove.png" alt="비둘기" onerror="this.src='https://placehold.co/150x150?text=Dove'"></div>
+                                    <div class="ex-answer-box" onclick="revealEx(this, '비둘기<br>평화, 희망')">?</div>
+                                </div>
+                                <div class="ex-item">
+                                    <div class="ex-img-box"><img src="imgs/sprout.png" alt="새싹" onerror="this.src='https://placehold.co/150x150?text=Sprout'"></div>
+                                    <div class="ex-answer-box" onclick="revealEx(this, '새싹<br>시작, 성장')">?</div>
+                                </div>
+                                <div class="ex-item">
+                                    <div class="ex-img-box"><img src="imgs/candle.png" alt="촛불" onerror="this.src='https://placehold.co/150x150?text=Candle'"></div>
+                                    <div class="ex-answer-box" onclick="revealEx(this, '촛불<br>희망, 꺼지지 않는 마음')">?</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="structure-step-2" class="structure-step" style="height:100%; display:none; flex-direction:column; overflow:visible;">
+                    <div class="instruction-banner">
+                        <span>빈칸에 알맞은 말을 찾아 두 기와의 다른 점을 비교해 보고, 각각 무엇을 상징하는지 알아봅시다.</span>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-tag"><i data-lucide="key" size="16"></i> 오늘의 문해 공식</div>
+                        <div class="formula-sub-tag" style="background:#f59e0b;">적용</div>
+                        <span>글 속 기와들은 무엇을 나타낼까요?</span>
+                    </div>
+                    <div class="compare-grid-container">
+                        <div class="compare-header-row">
+                            <div class="ch-empty"></div>
+                            <div class="ch-char">
+                                <div class="char-face"><img src="imgs/KB.png" alt="경복"></div> 경복이
+                            </div>
+                            <div class="ch-char">
+                                <div class="char-face"><img src="imgs/GU.png" alt="궁이"></div> 궁이
+                            </div>
+                        </div>
+                        <div class="compare-table-wrapper">
+                            <div class="cp-row">
+                                <div class="cp-label">겉모습</div>
+                                <div class="cp-content">오래됨, 낡음, 은은함</div>
+                                <div class="cp-content yellow">새것, 반짝반짝 윤이 남</div>
+                            </div>
+                            <div class="cp-row">
+                                <div class="cp-label">한 일</div>
+                                <div class="cp-content">
+                                    <button class="cp-dropdown-btn" onclick="toggleCpDrop(this)">?</button>
+                                    <div class="cp-dropdown-list">
+                                        <div class="cp-option" onclick="checkCpAnswer(this, true, '오랜 세월 동안 궁궐을 지켜옴')">오랜 세월 동안 궁궐을 지켜옴</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">낡은 것을 대신해 새로 옴</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">사람들을 안내하는 역할</div>
+                                    </div>
+                                </div>
+                                <div class="cp-content yellow">
+                                    <button class="cp-dropdown-btn" onclick="toggleCpDrop(this)">?</button>
+                                    <div class="cp-dropdown-list">
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">오랜 세월 동안 궁궐을 지켜옴</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, true, '낡은 것을 대신해 새로 옴')">낡은 것을 대신해 새로 옴</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">궁궐을 환하게 비춰 줌</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cp-row">
+                                <div class="cp-label">알고 있는 것</div>
+                                <div class="cp-content">
+                                    <button class="cp-dropdown-btn" onclick="toggleCpDrop(this)">?</button>
+                                    <div class="cp-dropdown-list">
+                                        <div class="cp-option" onclick="checkCpAnswer(this, true, '과거 조선 시대의 일들')">과거 조선 시대의 일들</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">요즘 궁궐에서 열리는 공연</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">경복궁의 비밀 통로</div>
+                                    </div>
+                                </div>
+                                <div class="cp-content yellow">
+                                    <button class="cp-dropdown-btn" onclick="toggleCpDrop(this)">?</button>
+                                    <div class="cp-dropdown-list">
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">과거 조선 시대의 일들</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, true, '요즘 궁궐에서 열리는 공연')">요즘 궁궐에서 열리는 공연</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">조선 왕조의 숨겨진 보물</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cp-row">
+                                <div class="cp-label">상징</div>
+                                <div class="cp-content">
+                                    <button class="cp-dropdown-btn" onclick="toggleCpDrop(this)">?</button>
+                                    <div class="cp-dropdown-list">
+                                        <div class="cp-option" onclick="checkCpAnswer(this, true, '전통과 역사')">전통과 역사</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">현대의 변화와 노력</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">자연과 생명</div>
+                                    </div>
+                                </div>
+                                <div class="cp-content yellow">
+                                    <button class="cp-dropdown-btn" onclick="toggleCpDrop(this)">?</button>
+                                    <div class="cp-dropdown-list">
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">전통과 역사</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, true, '현대의 변화와 보존을 위한 노력')">현대의 변화와 보존을 위한 노력</div>
+                                        <div class="cp-option" onclick="checkCpAnswer(this, false)">미래의 기술</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="structure-step-3" class="structure-step" style="height:100%; display:none; flex-direction:column;">
+                    <div class="instruction-banner">
+                        <span>제시된 의미를 상징하는 문장을 글 속에서 찾아 눌러 봅시다.</span>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-tag"><i data-lucide="key" size="16"></i> 오늘의 문해 공식</div>
+                        <div class="formula-sub-tag" style="background:#ea580c;">훈련</div>
+                        <span>글 속 상징을 이해하며 주제를 파악해 보아요.</span>
+                    </div>
+                    <div class="text-selection-area">
+                    <div class="passage-box">
+                            <div class="target-banner" style="width: fit-content; margin: 0 auto 30px auto; padding: 6px 25px; gap: 15px;">
+                            <span class="target-text" style="font-size: 18px;">전통 · 역사 · 문화유산의 가치</span>
+                            <span class="target-badge" style="font-size: 13px;">정답 2개</span>
+                            </div>
+    <div class="sentence-wrapper" onclick="checkSentence(this, true)">
+        <div class="check-box"></div>
+        <span class="sentence-text">어느 날 밤, 아주 오랜 시간 그 자리를 지켜온 기와, '경복이'가 긴 잠에서 깨어났다.</span>
+    </div>
+
+    <div class="sentence-wrapper" onclick="checkSentence(this, false)">
+        <div class="check-box"></div>
+        <span class="sentence-text">"으음....... 이게 무슨 소리지?"</span>
+    </div>
+
+    <div class="sentence-wrapper" onclick="checkSentence(this, false)">
+        <div class="check-box"></div>
+        <span class="sentence-text">"요즘 궁궐에서 열리는 음악 공연 소리예요! 참 좋죠?"</span>
+    </div>
+
+    <div class="sentence-wrapper" onclick="checkSentence(this, false)">
+        <div class="check-box"></div>
+        <span class="sentence-text">낯선 목소리에 깜짝 놀란 경복이가 주위를 둘러보자, 반짝반짝 윤이 나는 기와 하나가 경복이를 바라보고 있었다.</span>
+    </div>
+
+    <p style="text-align:center; color:#9ca3af; margin: 20px 0;">...중략...</p>
+
+    <div class="sentence-wrapper" onclick="checkSentence(this, false)">
+        <div class="check-box"></div>
+        <span class="sentence-text">"왕조는 수백 년 전에 끝났지만, 우리 궁궐이 지닌 가치와 역사는 아직도 소중하게 보존되고 있어."</span>
+    </div>
+
+    <div class="sentence-wrapper" onclick="checkSentence(this, false)">
+        <div class="check-box"></div>
+        <span class="sentence-text">"지금은 궁궐이 모든 사람에게 열려 있어서 이렇게 문화를 즐기러 오기도 하고요."</span>
+    </div>
+
+    <div class="sentence-wrapper" onclick="checkSentence(this, true)">
+        <div class="check-box"></div>
+        <span class="sentence-text">"우리 궁궐이 문화유산을 잘 지켜 온 덕분이죠!"</span>
+    </div>
+</div> </div> </div> <div class="nav-controls">
+            <button class="nav-btn" id="prev-btn" onclick="changeStep(-1)">
+                <i data-lucide="chevron-left" color="#374151" size="32"></i>
+            </button>
+            <div class="dots-indicator" id="dots-container"></div>
+            <button class="nav-btn" id="next-btn" onclick="changeStep(1)" disabled>
+                <i data-lucide="chevron-right" color="#374151" size="32"></i>
+            </button>
+        </div>
+        </div> </div> </div> 
+<audio id="guide-audio"></audio>
+<script src="script.js"></script>
+</body>
+</html>
