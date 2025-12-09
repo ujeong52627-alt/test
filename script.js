@@ -851,3 +851,4 @@ function showQuizFinger() {
 
 window.addEventListener('resize', handleScaling);
 init();
+
