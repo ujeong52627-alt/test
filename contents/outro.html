@@ -7,27 +7,74 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="is-outro">
     <div id="app-container">
         <div class="content-area">
             <div id="outro-screen" class="screen outro-bg">
-                <div class="outro-icon">🎉</div>
-                <div class="outro-title">참 잘했어요!</div>
-                <div class="outro-desc">오늘의 학습을 모두 완료했습니다.</div>
-<div class="outro-btn-group">
-    <button class="replay-btn exit-btn" onclick="location.href='../index.html'">
-        <i data-lucide="home" size="24"></i> 학습 종료하기
-    </button>
-    
-    <button class="replay-btn retry-btn" onclick="location.href='intro.html'">
-        <i data-lucide="rotate-ccw" size="24"></i> 다시 학습하기
-    </button>
-</div>
+                
+                <!-- ⭐ 책 닫힘 애니메이션 스테이지 -->
+                <div class="outro-book-stage">
+                    <div class="outro-book-container">
+
+                        <!-- ▶ 오른쪽 페이지 (그림 페이지) -->
+                        <div class="book-page right-page">
+                            <div class="page-content right-content">
+                                <img src="imgs/intro_illust.png" class="intro-illust">
+                            </div>
+                        </div>
+
+                        <!-- ▶ 왼쪽 페이지 + 커버 (회전하며 닫히는 부분) -->
+                        <div class="outro-flip-page">
+                            
+                            <!-- 펼쳐진 내부 페이지 -->
+                            <div class="page-face page-back">
+                                <div class="page-content left-content">
+                                    <div class="intro-badge">문화유산(1)</div>
+                                    <div class="intro-main-title" 
+                                         style="font-size: 40px; text-align: center;">
+                                        역사를 품은 기와,<br>경복이
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 닫히는 커버 -->
+                            <div class="page-face page-front">
+                                <div class="cover-design">
+                                    <div class="cover-spine"></div>
+                                    <div class="cover-title-box">
+                                        <div class="cover-main-title">오늘 8분 문해</div>
+                                        <div class="cover-sub-title">[응용] 4개월 2주차</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 버튼 영역 -->
+                <div class="outro-content-wrapper">
+                    <div class="outro-btn-group">
+
+                        <button class="replay-btn exit-btn" onclick="location.href='../index.html'">
+                            <i data-lucide="home"></i> 학습 종료하기
+                        </button>
+
+                        <button class="replay-btn retry-btn" onclick="location.href='intro.html'">
+                            <i data-lucide="rotate-ccw"></i> 다시 학습하기
+                        </button>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
+
     <audio id="guide-audio"></audio>
     <script src="script.js"></script>
+
 </body>
 </html>
- 
